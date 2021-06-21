@@ -102,6 +102,8 @@ def synthesize(labels,
                half_tone=0.0,
                sampling_frequency=-1,
                frame_period=-1,
+               all_pass=-1,
+               postfiltering=0.0,
                threshold=0.5,
                weight=1.0,
                weight_f0=1.0,
@@ -137,6 +139,8 @@ def synthesize(labels,
     # 追記 start
     if 1 <= sampling_frequency: _global_htsengine.set_sampling_frequency(sampling_frequency)
     if 1 <= frame_period: _global_htsengine.set_fperiod(frame_period)
+    if 0.0 <= all_pass <= 1.0: _global_htsengine.set_alpha(all_pass) 
+    if 0.0 <= postfiltering <= 1.0: _global_htsengine.set_beta(postfiltering) 
     if 0.0 <= threshold <= 1.0: _global_htsengine.set_msd_threshold(0, threshold) # stream_index
     if 0.0 <= weight: _global_htsengine.set_gv_weight(0, weight) # stream_index
     if 0.0 <= weight_f0: _global_htsengine.set_gv_interpolation_weight(0,0,weight_f0) # voice_index, stream_index
@@ -164,6 +168,8 @@ def tts(text, speed=1.0,
         half_tone=0.0, 
         sampling_frequency=-1,
         frame_period=-1,
+        all_pass=-1,
+        postfiltering=0.0,
         threshold=0.5,
         weight=1.0,
         weight_f0=1.0,
@@ -190,6 +196,8 @@ def tts(text, speed=1.0,
     return synthesize(extract_fullcontext(text), speed, half_tone, 
             sampling_frequency=sampling_frequency, 
             frame_period=frame_period, 
+            all_pass=all_pass,
+            postfiltering=postfiltering,
             threshold=threshold, 
             weight=weight, 
             weight_f0=weight_f0, 
