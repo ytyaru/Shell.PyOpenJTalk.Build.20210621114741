@@ -40,6 +40,7 @@ ply.wait_done()
 # 
 # htsvoiceファイルを変更する。
 # 
+from pyopenjtalk import HTSEngine, OpenJTalk
 import os.path
 text = 'この文章をしゃべります。'
 #voice = '/home/pi/root/sys/env/tool/openjtalk/voice/htsvoice-tohoku-f01/tohoku-f01-happy.htsvoice'
@@ -53,4 +54,14 @@ if os.path.isfile(voice):
     sr = engine.get_sampling_frequency()
     ply = sa.play_buffer(x.astype(numpy.int16), 1, 2, sr)
     ply.wait_done()
+
+#import ojtalker 
+from ojtalker import OpenJTalker, TalkParameter
+#from .ojtalker import OpenJTalker
+talker = OpenJTalker('/home/pi/root/sys/env/tool/openjtalk/voice')
+talker.talk('ラズベリーパイはおいしい。')
+param1 = TalkParameter(speed=1.0, half_tone=0.3, all_pass=0.6)
+talker.talk('音声合成は楽しい。', param1)
+param2 = TalkParameter(htsvoice='takumi_normal')
+talker.talk('おっさんの声は美しい', param2)
 
