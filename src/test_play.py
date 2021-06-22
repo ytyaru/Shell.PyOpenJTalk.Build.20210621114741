@@ -36,3 +36,21 @@ x, sr = pyopenjtalk.tts('なにか喋ります。', riff_file_name='/tmp/work/te
 
 ply = sa.play_buffer(x.astype(numpy.int16), 1, 2, sr)
 ply.wait_done()
+
+# 
+# htsvoiceファイルを変更する。
+# 
+import os.path
+text = 'この文章をしゃべります。'
+#voice = '/home/pi/root/sys/env/tool/openjtalk/voice/htsvoice-tohoku-f01/tohoku-f01-happy.htsvoice'
+#voice = '/home/pi/root/sys/env/tool/openjtalk/voice/akihiro0105/月音ラミ_1.0/月音ラミ_1.0.htsvoice'
+#voice = '/home/pi/root/sys/env/tool/openjtalk/voice/MMDAgent_Example-1.8/Voice/takumi/takumi_normal.htsvoice'
+voice = '/home/pi/root/sys/env/tool/openjtalk/voice/htsvoice-tohoku-f01/tohoku-f01-neutral.htsvoice'
+if os.path.isfile(voice):
+    engine = HTSEngine(voice.encode('utf-8'))
+    labels = pyopenjtalk.extract_fullcontext(text)
+    x = engine.synthesize(labels)
+    sr = engine.get_sampling_frequency()
+    ply = sa.play_buffer(x.astype(numpy.int16), 1, 2, sr)
+    ply.wait_done()
+
