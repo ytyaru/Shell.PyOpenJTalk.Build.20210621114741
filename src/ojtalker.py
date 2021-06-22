@@ -9,29 +9,17 @@ class OpenJTalker:
         engine, labels = self.__set_params(text, param)
         x = engine.synthesize(labels)
         sr = engine.get_sampling_frequency()
-        if save_path: self.__save(x, sr, param=param)
+#        if save_path: self.__save(x, sr, path=save_path)
+#        if save_path: self.__save2(engine, save_path)
         ply = sa.play_buffer(x.astype(numpy.int16), 1, 2, sr)
         ply.wait_done()
     def talk_async(self, text, param=None, save_path=None):
         engine, labels = self.__set_params(text, param)
         x = engine.synthesize(labels)
         sr = engine.get_sampling_frequency()
-        if save_path: self.__save(x, sr, param=param)
+#        if save_path: self.__save(x, sr, path=save_path)
         return sa.play_buffer(x.astype(numpy.int16), 1, 2, sr)
         # if play_obj.is_playing(): play_ojb.stop()
-    def save(self, text, param=None):
-        engine, labels = self.__set_params(text, param)
-        x = engine.synthesize(labels)
-        sr = engine.get_sampling_frequency()
-        self.__save(x, sr)
-    def __save(self, x, sr, param=None):
-        _data = x[:]
-        data = struct.pack('h' * len(x), *_data)
-        with wave.open(path, 'w') as f:
-            f.setnchannels(1)
-            f.setsampwidth(2)
-            f.setframerate(sr)
-            f.writeframes(data)
     def __set_params(self, text, params):
         labels = pyopenjtalk.extract_fullcontext(text)
         if isinstance(labels, tuple) and len(labels) == 2: labels = labels[1]
@@ -49,6 +37,25 @@ class OpenJTalker:
         if 0.0 <= params.Volume: engine.set_volume(params.Volume)
         if 0.0 <= params.BufferSize: engine.set_audio_buff_size(params.BufferSize)
         return engine, labels
+    """
+    def save(self, text, param=None, save_path='ojt.wav'):
+        engine, labels = self.__set_params(text, param)
+        x = engine.synthesize(labels)
+        sr = engine.get_sampling_frequency()
+        self.__save(x, sr, path=save_path)
+    def __save(self, x, sr, path='ojt.wav'):
+#        _data = x[:]
+#        print(len(x))
+#        data = struct.pack('h' * len(x), *_data)
+        with wave.open(path, 'wb') as f:
+            f.setnchannels(1)
+            f.setsampwidth(2)
+            f.setframerate(sr)
+            f.writeframesraw(x)
+#            f.writeframes(data)
+    def __save2(self, engine, path):
+        engine.save_riff(path.encode('utf-8'))
+    """
 
 class HtsEngineContainer:
     def __init__(self, htsvoice_dir_path=None):

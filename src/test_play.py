@@ -63,5 +63,5 @@ talker.talk('ラズベリーパイはおいしい。')
 param1 = TalkParameter(speed=1.0, half_tone=0.3, all_pass=0.6)
 talker.talk('音声合成は楽しい。', param1)
 param2 = TalkParameter(htsvoice='takumi_normal')
-talker.talk('おっさんの声は美しい', param2)
+talker.talk('おっさんの声は美しい', param2, '/tmp/work/ossan.wav')
 
