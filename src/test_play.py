@@ -58,13 +58,20 @@ if os.path.isfile(voice):
 #import ojtalker 
 from ojtalker import OpenJTalker, TalkParameter
 #from .ojtalker import OpenJTalker
+talker = OpenJTalker()
+talker.talk('デフォルトの声はメイちゃんです。')
 talker = OpenJTalker('/home/pi/root/sys/env/tool/openjtalk/voice')
+print(talker.VoiceRootDir)
+print(len(talker.VoiceNames))
+print(talker.VoiceNames)
 talker.talk('ラズベリーパイはおいしい。')
 param1 = TalkParameter(speed=1.0, half_tone=0.3, all_pass=0.6)
 talker.talk('音声合成は楽しい。', param1)
 param2 = TalkParameter(htsvoice='takumi_normal')
 talker.talk('おっさんの声は美しい', param2, '/tmp/work/ossan.wav')
 talker.save('読み上げずにファイル保存する。', param2, '/tmp/work/save.wav')
+param3 = TalkParameter(htsvoice='/home/pi/root/sys/env/tool/openjtalk/voice/akihiro0105/月音ラミ_1.0/月音ラミ_1.0.htsvoice')
+talker.talk('ラミちゃんは可愛い。', param3, '/tmp/work/rami.wav')
 
 # ファイル保存する
 # synthesize_from_strings()を呼び出す必要がある。（synthesize()ではダメ。空ファイルが出力されてしまう）
