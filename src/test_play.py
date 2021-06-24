@@ -4,8 +4,8 @@ import pyopenjtalk
 import numpy
 import simpleaudio as sa
 
-x, sr = pyopenjtalk.tts('なにか喋ります。')
-#x, sr = pyopenjtalk.tts('なにか喋ります。', weight_f0=0.9)
+#x, sr = pyopenjtalk.tts('なにか喋ります。')
+x, sr = pyopenjtalk.tts('なにか喋ります。', weight_f0=0.9)
 #x, sr = pyopenjtalk.tts('なにか喋ります。', weight=0.15)
 #x, sr = pyopenjtalk.tts('なにか喋ります。', all_pass=0.35, weight=0.4)
 #x, sr = pyopenjtalk.tts('ファイルに保存します。', riff_file_name='/tmp/work/test.wav')
@@ -64,4 +64,12 @@ param1 = TalkParameter(speed=1.0, half_tone=0.3, all_pass=0.6)
 talker.talk('音声合成は楽しい。', param1)
 param2 = TalkParameter(htsvoice='takumi_normal')
 talker.talk('おっさんの声は美しい', param2, '/tmp/work/ossan.wav')
+
+# ファイル保存する
+# synthesize_from_strings()を呼び出す必要がある。（synthesize()ではダメ。空ファイルが出力されてしまう）
+if os.path.isfile(voice):
+    engine = HTSEngine(voice.encode('utf-8'))
+    njd_results, labels = pyopenjtalk.run_frontend('話をしましょうか。')
+    engine.synthesize_from_strings(labels)
+    engine.save_riff('/tmp/work/save_riff.wav'.encode('utf-8'))
 

@@ -20,6 +20,9 @@ Run() {
 	cd pyopenjtalk
 	git submodule update -i
 
+	# コードを書き換える
+	# ./pyopenjtalk_rewrite_codes_1/...
+
 	# Pythonのパッケージ仮想環境をつくる。
 	cd "$PATH_VENV"
 	python3 -m venv env
