@@ -9,7 +9,6 @@ class OpenJTalker:
         engine, labels = self.__set_params(text, param)
         x = engine.synthesize(labels)
         sr = engine.get_sampling_frequency()
-        if save_path: self.__save(text, param=param, save_path=save_path)
 #        if save_path: self.__save(x, sr, path=save_path)
 #        if save_path: self.__save2(engine, save_path)
         ply = sa.play_buffer(x.astype(numpy.int16), 1, 2, sr)
@@ -18,7 +17,6 @@ class OpenJTalker:
         engine, labels = self.__set_params(text, param)
         x = engine.synthesize(labels)
         sr = engine.get_sampling_frequency()
-        if save_path: self.__save(text, param=param, save_path=save_path)
 #        if save_path: self.__save(x, sr, path=save_path)
         return sa.play_buffer(x.astype(numpy.int16), 1, 2, sr)
         # if play_obj.is_playing(): play_ojb.stop()
@@ -39,16 +37,6 @@ class OpenJTalker:
         if 0.0 <= params.Volume: engine.set_volume(params.Volume)
         if 0.0 <= params.BufferSize: engine.set_audio_buff_size(params.BufferSize)
         return engine, labels
-
-    def save(self, text, param=None, save_path='ojt.wav'):
-        self.__save(text, param=param, save_path=save_path)
-
-    def __save(self, text, param=None, save_path='ojt.wav'):
-        engine, labels = self.__set_params(text, param)
-        njd_results, labels = pyopenjtalk.run_frontend(text)
-        engine.synthesize_from_strings(labels)
-        engine.save_riff(save_path.encode('utf-8'))
-        
     """
     def save(self, text, param=None, save_path='ojt.wav'):
         engine, labels = self.__set_params(text, param)
