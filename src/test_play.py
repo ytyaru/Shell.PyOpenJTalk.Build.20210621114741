@@ -5,8 +5,8 @@ import numpy
 import simpleaudio as sa
 
 #x, sr = pyopenjtalk.tts('なにか喋ります。')
-x, sr = pyopenjtalk.tts('なにか喋ります。', weight_f0=0.9)
-#x, sr = pyopenjtalk.tts('なにか喋ります。', weight=0.15)
+#x, sr = pyopenjtalk.tts('なにか喋ります。', weight_f0=0.9)
+x, sr = pyopenjtalk.tts('なにか喋ります。', weight=0.7)
 #x, sr = pyopenjtalk.tts('なにか喋ります。', all_pass=0.35, weight=0.4)
 #x, sr = pyopenjtalk.tts('ファイルに保存します。', riff_file_name='/tmp/work/test.wav')
 

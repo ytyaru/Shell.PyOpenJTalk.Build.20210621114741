@@ -36,7 +36,7 @@ class OpenJTalker:
         if 0.0 <= params.Postfiltering <= 1.0: engine.set_beta(params.Postfiltering) 
         if 0.0 <= params.Threshold <= 1.0: engine.set_msd_threshold(0, params.Threshold) # stream_index
         if 0.0 <= params.Weight: engine.set_gv_weight(0, params.Weight) # stream_index
-        if 0.0 <= params.WeightF0: engine.set_gv_interpolation_weight(0,0,params.WeightF0) # voice_index, stream_index
+        if 0.0 <= params.WeightF0: engine.set_gv_weight(1, params.WeightF0) # stream_index
         if 0.0 <= params.Volume: engine.set_volume(params.Volume)
         if 0.0 <= params.BufferSize: engine.set_audio_buff_size(params.BufferSize)
         return engine, labels

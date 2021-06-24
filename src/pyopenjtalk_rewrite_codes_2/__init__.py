@@ -126,8 +126,6 @@ def synthesize(labels,
         np.ndarray: speech waveform (dtype: np.float64)
         int: sampling frequency (defualt: 48000)
     """
-    if isinstance(labels, tuple) and len(labels) == 2:
-        labels = labels[1]
 
     global _global_htsengine
     if _global_htsengine is None:
@@ -143,7 +141,8 @@ def synthesize(labels,
     if 0.0 <= postfiltering <= 1.0: _global_htsengine.set_beta(postfiltering) 
     if 0.0 <= threshold <= 1.0: _global_htsengine.set_msd_threshold(0, threshold) # stream_index
     if 0.0 <= weight: _global_htsengine.set_gv_weight(0, weight) # stream_index
-    if 0.0 <= weight_f0: _global_htsengine.set_gv_interpolation_weight(0,0,weight_f0) # voice_index, stream_index
+    if 0.0 <= weight_f0: _global_htsengine.set_gv_weight(1, weight) 
+#    if 0.0 <= weight_f0: _global_htsengine.set_gv_interpolation_weight(0,0,weight_f0) # voice_index, stream_index
 #    if 0.0 <= weight_f0: _global_htsengine.set_gv_weight(1, weight) # https://cpp.hotexamples.com/jp/examples/-/-/FSCTerminate/cpp-fscterminate-function-examples.html
     if 0.0 <= volume: _global_htsengine.set_volume(volume)
     if 0.0 <= buffer_size: _global_htsengine.set_audio_buff_size(buffer_size)
@@ -172,6 +171,7 @@ def synthesize(labels,
     x = _global_htsengine.synthesize(labels)
 #    return _global_htsengine.synthesize(labels), sr
 
+    """
 #    if file_name is not None: _global_htsengine.save_generated_speech(file_name)
 #    if info_file_name is not None: _global_htsengine.save_information(info_file_name)
 #    if label_file_name is not None: _global_htsengine.save_label(label_file_name )
@@ -190,7 +190,6 @@ def synthesize(labels,
     if param_file_name is not None and os.path.isfile(param_file_name): _global_htsengine.save_generated_parameter(0, param_file_name.encode('utf-8')) # stream_index
 #    if riff_file_name is not None and os.path.isfile(riff_file_name): _global_htsengine.save_riff(riff_file_name.encode('utf-8'))
     if riff_file_name is not None and os.path.isfile(riff_file_name): _global_htsengine.save_riff(riff_file_name.encode('utf-8'))
-    """
     """
 
     return x, sr
@@ -225,6 +224,22 @@ def tts(text, speed=1.0,
         np.ndarray: speech waveform (dtype: np.float64)
         int: sampling frequency (defualt: 48000)
     """
+    # 追記:ファイル保存するため
+
+    if file_name or info_file_name or label_file_name or param_file_name or riff_file_name:
+        njd_results, labels = pyopenjtalk.run_frontend(text)
+        global _global_htsengine
+        if _global_htsengine is None:
+            _global_htsengine = HTSEngine(DEFAULT_HTS_VOICE)
+        _global_htsengine.synthesize_from_strings(labels)
+#        engine.save_riff(save_path.encode('utf-8'))
+        if file_name is not None: _global_htsengine.save_generated_speech(file_name.encode('utf-8'))
+        if info_file_name is not None: _global_htsengine.save_information(info_file_name.encode('utf-8'))
+        if label_file_name is not None: _global_htsengine.save_label(label_file_name.encode('utf-8'))
+        if param_file_name is not None: _global_htsengine.save_generated_parameter(0, param_file_name.encode('utf-8')) # stream_index
+        if riff_file_name is not None: _global_htsengine.save_riff(riff_file_name.encode('utf-8'))
+
+
 #    return synthesize(extract_fullcontext(text), speed, half_tone)
     return synthesize(extract_fullcontext(text), speed, half_tone, 
             sampling_frequency=sampling_frequency, 
