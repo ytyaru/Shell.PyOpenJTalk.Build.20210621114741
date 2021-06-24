@@ -168,8 +168,8 @@ def synthesize(labels,
 
     # 追記 end
 
-    x = _global_htsengine.synthesize_from_strings(labels)
-#    x = _global_htsengine.synthesize(labels)
+#    x = _global_htsengine.synthesize_from_strings(labels)
+    x = _global_htsengine.synthesize(labels)
 #    return _global_htsengine.synthesize(labels), sr
 
 #    if file_name is not None: _global_htsengine.save_generated_speech(file_name)
