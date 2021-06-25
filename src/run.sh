@@ -16,7 +16,8 @@ Run() {
 
 	# PyOpenJTalkリポジトリと、そのサブモジュールを取得する。
 	cd "${PATH_POJT}"
-	git clone https://github.com/r9y9/pyopenjtalk
+#	git clone https://github.com/r9y9/pyopenjtalk
+	git clone https://github.com/ytyaru/pyopenjtalk
 	cd pyopenjtalk
 	git submodule update -i
 
