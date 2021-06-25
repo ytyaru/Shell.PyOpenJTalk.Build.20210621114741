@@ -17,9 +17,16 @@ class OpenJTalker:
         return sa.play_buffer(x.astype(numpy.int16), 1, 2, sr)
         # if play_obj.is_playing(): play_ojb.stop()
     def __talk(self, text, param=None, save_path=None):
-        if save_path: self.__save(text, param=param, save_path=save_path)
+#        if save_path: self.__save(text, param=param, save_path=save_path)
         engine, labels = self.__set_params(text, param)
-        x = engine.synthesize(labels)
+
+#        x = engine.synthesize(labels)
+#        njd_results, labels = pyopenjtalk.run_frontend(text)
+        engine.synthesize_from_strings(labels)
+        x = engine.get_generated_speech()
+        if save_path: engine.save_riff(save_path.encode('utf-8'))
+        engine.refresh()
+
         sr = engine.get_sampling_frequency()
         ply = sa.play_buffer(x.astype(numpy.int16), 1, 2, sr)
         return ply
