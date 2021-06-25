@@ -72,6 +72,9 @@ talker.talk('おっさんの声は美しい', param2, '/tmp/work/ossan.wav')
 talker.save('読み上げずにファイル保存する。', param2, '/tmp/work/save.wav')
 param3 = TalkParameter(htsvoice='/home/pi/root/sys/env/tool/openjtalk/voice/akihiro0105/月音ラミ_1.0/月音ラミ_1.0.htsvoice')
 talker.talk('ラミちゃんは可愛い。', param3, '/tmp/work/rami.wav')
+param4 = TalkParameter(htsvoice='/home/pi/root/sys/env/tool/openjtalk/voice/hts_voice_nitech_jp_atr503_m001-1.05/nitech_jp_atr503_m001.htsvoice', weight_f0=0.1)
+talker.talk('weight_f0パラメータはボイスファイルnitech_jp_atr503_m001.htsvoiceで確認できた。しかしmeiでは変化が確認できなかった。', param=param4)
+# weightF0はhtsvoiceに依存するらしい。
 
 # ファイル保存する
 # synthesize_from_strings()を呼び出す必要がある。（synthesize()ではダメ。空ファイルが出力されてしまう）
