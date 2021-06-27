@@ -1,1 +1,4 @@
 *.pyc
+src/**/*.pyc
+__pycache__/
+ojtalker.cpython-37.pyc

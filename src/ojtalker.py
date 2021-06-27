@@ -17,16 +17,11 @@ class OpenJTalker:
         return sa.play_buffer(x.astype(numpy.int16), 1, 2, sr)
         # if play_obj.is_playing(): play_ojb.stop()
     def __talk(self, text, param=None, save_path=None):
-#        if save_path: self.__save(text, param=param, save_path=save_path)
         engine, labels = self.__set_params(text, param)
-
-#        x = engine.synthesize(labels)
-#        njd_results, labels = pyopenjtalk.run_frontend(text)
         engine.synthesize_from_strings(labels)
         x = engine.get_generated_speech()
         if save_path: engine.save_riff(save_path.encode('utf-8'))
         engine.refresh()
-
         sr = engine.get_sampling_frequency()
         ply = sa.play_buffer(x.astype(numpy.int16), 1, 2, sr)
         return ply
@@ -65,9 +60,13 @@ class HtsEngineContainer: # HTSEngine(voice)で生成したインスタンスを
         if self.__root_dir is not None and os.path.isdir(self.__root_dir):
             self.__pathes = glob.glob(os.path.join(self.__root_dir, '**/*.htsvoice'), recursive=True)
             for path in self.__pathes:
-                name = os.path.splitext(os.path.basename(path))[0]
-                if name in self.__names: print(f'WARN: htsvoiceのファイル名が重複している。: {name}: {path}')
-                else: self.__names.append(name)
+                self.__add_name_from_path(path)
+    def __add_name(self, path, name):
+        if name in self.__names: print(f'WARN: htsvoiceのファイル名が重複している。: {name}: {path}')
+        else: self.__names.append(name)
+        return name
+    def __add_name_from_path(self, path):
+        return self.__add_name(path, os.path.splitext(os.path.basename(path))[0])
     @property
     def RootDir(self): return self.__root_dir
     @property
@@ -89,15 +88,13 @@ class HtsEngineContainer: # HTSEngine(voice)で生成したインスタンスを
             return None
         elif name in self.__pathes: # ファイルパス
             path = name
-            name = os.path.splitext(os.path.basename(path))[0]
-            if name in self.__names: print(f'WARN: htsvoiceのファイル名が重複している。: {name}: {path}')
+            name = self.__add_name_from_path(name)
             self.__engines[name] = pyopenjtalk.HTSEngine(path.encode('utf-8'))
             return self.__engines[name]
         else: # RootDirに存在しないが別のパスに存在する
             path = name
             if os.path.isfile(path):
-                name = os.path.splitext(os.path.basename(path))[0]
-                if name in self.__names: print(f'WARN: htsvoiceのファイル名が重複している。: {name}: {path}')
+                name = self.__add_name_from_path(name)
                 self.__engines[name] = pyopenjtalk.HTSEngine(path.encode('utf-8'))
                 return self.__engines[name]
             else: return None
