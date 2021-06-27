@@ -163,10 +163,24 @@ sinario.txt
 悲しい|mei_sad.htsvoice|tohoku-f01-sad.htsvoice|takumi_sad.htsvoice
 恥ずかしい|mei_bashful.htsvoice|-|-
 
+# GUI
 
+```
+[テキスト         ▼][話す]
+options----------------------------------------+
+| Speed        [1.0]  SamplingFrequency [48000]|
+| HalfTone     [0.0]  FramePeriod       [-1]   |
+| AllPass      [-1]   BufferBize        [0.0]  |
+|                                              |
+| Postfiltering[0.0]                           |
+| Threshold    [0.5]                           |
+| Weight       [1.0]                           |
+| WeightF0     [1.0]                           |
+| Volume       [0.0]                           |
++----------------------------------------------+
+```
 
-
-
+```
 
 
 
