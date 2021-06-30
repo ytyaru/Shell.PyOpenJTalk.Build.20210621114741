@@ -113,9 +113,9 @@ Enum型名
 		* movie(avi,mp4,webm)
 	* Boolean（`0`/`1`, `f`/`t`(`F`/`T`,`true`/`false`,`True`/`False`,`TRUE`/`FALSE`)）
 	* Numeric
-		* 整数（sign/unsign, size=1,2,4,8,...）
-		* 実数（浮動小数点数）
-		* decimal
+		* int	整数（sign/unsign, size=1,2,4,8,...）
+		* float	実数（浮動小数点数）
+		* decimal（テキスト形式の実数。小数点の桁や値を丸めることなくテキスト形式で保存する）
 	* Text
 		* Path
 		* Url
@@ -134,9 +134,14 @@ Enum型名
 		* Local `yyyy-MM-dd HH:mm:ss`
 		* UTC `yyyy-MM-dd HH:mm:ssZ`, `yyyy-MM-dd HH:mm:ss+0900`
 	* Color
-		* RGB
-		* LCh
-		* CMYK
+		* RGB  255,255,255, #FFFFFF, 100%,100%,100%
+		* LCh  100%,100%,100%
+		* CMYK 100%,100%,100%
+	* Ref
+		* Null/None/Nil
+		* 継承
+		* 参照（参照ポインタ／値コピー）
+		* ファイル参照（内部、外部）
 * Container
 	* Array/List
 	* Tree
@@ -145,29 +150,71 @@ Enum型名
 
 validate
 ```
+number
 0 <= ファイル.インスタンス.キー <= 100
 ファイル.インスタンス.キー
 	0 <= _ <= 100 ||
 	-100 <= _ <= -999
-ファイル.インスタンス.キー = 正規表現
-ファイル.インスタンス.キー == 文字列―完全一致
-ファイル.インスタンス.キー -= 文字列―部分一致
-ファイル.インスタンス.キー ^= 文字列―前方一致
-ファイル.インスタンス.キー $= 文字列―後方一致
+
+datetime
+yyyy-MM-ddTHH:mm:ss <= ファイル.インスタンス.キー <= yyyy-MM-ddTHH:mm:ss
+ファイル.インスタンス.キー
+	yyyy-MM-ddTHH:mm:ss <= _ <= yyyy-MM-ddTHH:mm:ss
+
+text
+ファイル.インスタンス.キー = 正規表現          Match
+ファイル.インスタンス.キー == 文字列―完全一致 Equal
+ファイル.インスタンス.キー -= 文字列―部分一致 In
+ファイル.インスタンス.キー ^= 文字列―前方一致 StartsWith
+ファイル.インスタンス.キー $= 文字列―後方一致 EndsWith
+
+path
+ファイル.インスタンス.キー = ext:txt
+ファイル.インスタンス.キー = name:txt
+ファイル.インスタンス.キー = file:name.ext
+ファイル.インスタンス.キー = parent:dir/dir
+ファイル.インスタンス.キー IsMovie,IsAudio,IsImage,Is3dModel...
+
+binary
+ファイル.インスタンス.キー IsMovie,IsAudio,IsImage,Is3dModel...
+
+number|text
 ファイル.インスタンス.キー = 選択肢１, 選択肢２, 選択肢３
 ファイル.インスタンス.キー	選択肢１	選択肢２	選択肢３
 ファイル.インスタンス.キー
 	選択肢１
 	選択肢２
 	選択肢３
-
 ```
 
 error
 ```
 強制終了
 例外スロー
-メッセージ出力（ファイル）
+メッセージ出力（ファイル（stdout,stderr,任意FD,任意ファイル））
 イベント発火（それを契機に通知システムへ渡したり、メール発信するなど各種出力できる）
+無視
+```
+
+# テキストから型を推測する
+
+Number
+```
+[0-9]+[\.]?[0-9]*
+```
+整数
+```
+[0-9]+
+```
+実数
+```
+[0-9]*[\.]?[0-9]+
+```
+日時
+```
+yyyy[\-/]MM[\-/]dd[\-/][ T]HH:mm:dd[Z]?[+\-]TTTT
+\d{4,}[\-/]\d{2}[\-/]\d{2}[\-/][ T]\d{2}:\d{2}:\d{2}[Z]?[+\-]TTTT
+\d{4,}[\-/]\d{2}[\-/]\d{2}[\-/]
+\d{2}:\d{2}:\d{2}
 ```
 
